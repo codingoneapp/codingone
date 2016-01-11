@@ -1,0 +1,804 @@
+
+<!doctype html>
+<html xmlns:wb=“http://open.weibo.com/wb”>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+<title>layer官方演示与讲解（jQuery弹出层插件）</title>
+<meta name="keywords" content="弹出层,jQuery插件,layer">
+
+<style>
+html,body{_overflow-y:auto;; font-family:'微软雅黑';  font-size:14px;}
+body{ background:#E3E3E3;}
+a:hover{ text-decoration:none;}
+i{ font-family:Bookman Old Style;}
+pre{font-family:'微软雅黑'}
+.clear:after{clear:both; content:'.'; display:block; height:0; font-size:0; visibility:hidden;}
+.clear{zoom:1; clear:both;}
+.hide{display:none;}
+.box{ width:1000px; position:relative;}
+.layer_banner{height:190px; background:#393D49; }
+.layer_banner span.ie6PNG{ position:absolute; width:912px; height:79px; background:url(images/banner.png) no-repeat; top:30px;}.layer_banner h1{display:none;}
+.layer_banner em{ position:absolute; bottom:30px; right:0; color:#fff;}.layer_banner em a{color:#fff;}
+.layer_nav{ height:40px; background:url(images/layer_nav.jpg) repeat-x; text-shadow: 1px 1px 0 #393D49;}
+.layer_nav a{position:relative; color:#fff; font-size:16px; padding-right:50px; line-height:40px;}.layer_nav a:hover{color:#F5F5F5;}
+.layer_about{ background:#fff; padding-top:20px;}
+.layer_notice{float:left; height:75px; width:330px;  overflow:hidden;  background:#78BA32; padding:10px; border:1px solid #628C1C;}.layer_notice a{color:#fff;}
+.layer_notice li{ line-height:25px;}
+.layer_ico{ background:url(images/layer_ico.png) no-repeat;}
+.layer_download{ height:75px; width:608px; float:right; margin-left:15px; _display:inline; background:#80D5FE; padding:10px; border:1px solid #56B4DC; position:relative;}
+.layer_download li{ line-height:25px; color:#373737;}
+.layer_download .layer_yuan{position:absolute; width:53px; height:72px; right:240px; top:10px; background-position:-1px -4px; }
+.layer_download .layer_down{ position:absolute; width:197px; height:55px; background-position:-78px -12px; right:18px; top:15px;}
+.layer_download .layer_downs{ position:absolute; right:18px; bottom:2px; width:197px; height:20px; line-height:20px; overflow:hidden; color:#373737; font-size:12px;} .layer_downs em{ font-family:Verdana;}
+.layer_down:hover{background-position:-78px -78px;}
+.layer_download .padding{ padding-left:70px; line-height:20px;}
+.layer_text{position:reletive; padding:30px 0 0; clear:both; color:#373737; clear:both;}
+.layer_text h2{ height:35px; line-height:30px;}
+.layer_text p,.write p{margin-bottom: 10px; text-indent: 2em; line-height:23px;}
+.layer_first{ margin:10px 0 0 10px;}
+.layer_first a,.layer_target a, .layer_first span{ padding:0 20px; height:30px; line-height:30px; margin-right:10px; float:left; text-align:center; display:block; border:1px solid #aaa; background:#F2F2F2; cursor:pointer;}
+.layer_api{  background-color:#383931; padding-bottom:20px; color:#D1D2CA;}.layer_api a{color:#D1D1D1; }
+.layer_apiTop{ height:10px; background:#262626;}
+.layer_apiBox{margin: 20px auto; background-color:#2D2E27; font-size: 12px;}
+.api_table{} .api_table tr{ line-height:20px;  vertical-align:text-top;}
+.api_table tr td{ padding: 5px 15px; border:1px solid #48493F;}
+.api_title tr{ height:50px; background-color:#383931}
+.layer_demo{ padding:20px 0; background:#E3E3E3;}
+.demo_main{ width:960px; padding:0 20px 20px; background-color:#fff;}
+.code1,.code2{ clear:both;}
+.write{ padding:20px; width:auto;}
+.layer_top{ background-position:  0 -141px; width: 57px; height: 57px; overflow: hidden; position: fixed; right:0; bottom:35px; display:none;}
+.layer_top:hover{ background-position:  -70px -141px;}
+.taobao{padding:10px 0 0 20px;}
+.taobao li{float:left; margin-right:10px; width:230px; line-height:22px;}
+.taobao li a cite{display:block; height:44px; overflow:hidden;}
+.taobao li .price{font: normal 24px Tahoma,Arial,Helvetica,sans-serif; font-family: verdana,arial; text-align:left; text-indent: 0; padding-top:5px; color:#f40; font-weight: 700;}
+.taobao li a img:hover{opacity:0.8; fliter:alpha(opacity=80);}
+.layer_text .layer_msg{height:30px; line-height:30px; padding:0 10px; border:1px solid #FF9900; background-color:#FFF8ED; font-size:14px;}
+.juan{width:600px; height:480px; padding:10px; text-align:center; background-color:#fff;}
+.juan p{line-height:23px;}
+.juan p a{font-size:14px;}
+.juanGo, .juanLu{display:inline-block; *display:inline; *zoom:1; margin-right:10px;  line-height:30px; padding:0 15px;}
+.juanGo{border:1px solid #F67600; background-color:#FFA100; color:#fff;}
+.juanGo:hover{background-color:#FFB12F; color:#fff;}
+.juanLu{border:1px solid #B3B3B3; padding:0 20px; background-color:#FDFDFD; color:#595959;}
+.juanLu:hover{border:1px solid #888;}
+.jiaoliu a{color:#f60; padding-right:10px; font-weight:bold;}
+strong{font-weight:bold;}
+#seepay{position:absolute; right:10px; top:185px; line-height:24px; padding:3px 20px; background-color:#FF4400; color:#fff; border-radius:3px; box-shadow:1px 1px 1px #ccc; z-index:100;}
+#seepay:hover{background-color:#E84000;}
+#newdemo{position:fixed; _position:absolute; top:380px; left:0; width:20px; padding:10px; background-color:#DF3511; color:#fff; opacity:0.8; fliter:alpha(opacity=80); border-radius:0 3px 3px 0; cursor:pointer;}
+#newdemo:hover{background-color:#2383AB;}
+.area_zero{position:absolute; width:0; height:0; border-style:dashed; border-color:transparent; overflow:hidden;}
+.filter_nums{position:absolute; z-index:9; left:6px; top:-22px; height:16px; line-height:16px; padding:0 5px; background-color:#FF4400; color:#fff; font-size:12px; border-radius:3px; _float:left;}
+.layer_nav a .area_zero{z-index: 8; top:-15px; left:8px; border-width: 8px; border-right-style: solid; border-right-color:#FF6600;}
+</style>
+</head>
+<script src="http://res.xiami.net/pc/lay/lib.js"></script>
+<script src="../../lily/lib/layer/layer.min.js?v=1.6.0" msg="插件核心文件。压缩版：layer.min.js；开发版：layer.js"></script>
+<script>
+var site = 'http://' + document.domain + '/';
+</script>
+<!--[if IE 6]> 
+<script type="text/javascript" src="http://sentsin.com/lily/lib/png.js"></script>
+<script type="text/javascript">DD_belatedPNG.fix('.ie6PNG');</script>
+<![endif]--> 
+<body>
+<div class="layer_banner">
+	<div class="box" style="height:190px;">
+		<h1>jQuery-plugin-layer（弹出层插件）官方演示与讲解</h1>
+    	<span class="ie6PNG" title="layer,一个可以让你想到即可做到的javascript弹窗（层）解决方案"></span>
+    	<em><i>author</i>：<a href="http://sentsin.com" target="_blank">贤心</a></em>
+    </div>
+</div>
+<div class="layer_nav">
+	<div class="box"> 
+    	<a href="javascript:;" scroll="about">关于<i>layer</i></a><a href="javascript:;" scroll="api" id="navApi">API</a><a href="javascript:;" scroll="demo">demo演示</a><a href="http://sentsin.com/jquery/layer/test.html"  target="_blank" title="每周新增若干例子">实例加强版</a><a href="javascript:;" id="questions">常见问题</a>
+        <a href="http://sentsin.com/web/layer.html#comment" id="suggest">
+            建议反馈
+            <cite class="filter_nums">hot</cite>
+            <cite class="area_zero"></cite>
+        </a>
+        <a href="http://sentsin.com/" target="_blank">博客首页</a><a href="https://me.alipay.com/sentsin"  id="zanzhu" target="_blank">赞助<i>layer</i></a>
+		<a href="javascript:;" id="seepay">查看赞助名单</a>
+    </div>
+		
+</div>
+<div class="layer_about clear">
+	<div class="box">
+        <ul class="layer_notice">
+        	<li><a href="data.html" id="updata" target="_blank">v1.6.0，layer-2013感恩版，饱含深情的大更新</a></li>
+            <li><a href="http://sentsin.com/jquery/layer/liuyanqiang.html" target="_blank">layer组件轻松实现留言墙，chrome查看最佳</a></li>
+            <li><a href="javascript:;" id="juan">如果你喜欢layer，可赞助1到10元，layer感恩无限。</a></li>
+        </ul>
+        <div class="layer_download">
+        	<ul>
+            	<li>当前版本：v<script>document.write(layer.v);</script>  （2013-8-30更新）</li>
+                <li>相关交流：176047238 <a target="_blank" href="http://wp.qq.com/wpa/qunwpa?idkey=beca7943e4635739cfee661d53c263af60aca29bd10cd9b47fe6f1dcd49a0572"><img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" alt="大前端江湖-layUI一群" title="大前端江湖-layUI一群"></a></li>
+                <li class="padding"><wb:follow-button uid="1571889140" type="red_3" width="100%" height="24"></wb:follow-button></li>
+            </ul>
+        	<span class="layer_yuan layer_ico ie6PNG"></span>
+            <a class="layer_down layer_ico ie6PNG" href="http://xu.sentsin.com/download/layer-v1.6.0.rar" target="_blank" title="layer，弹出层插件下载"></a>
+            <span class="layer_downs">大小：52KB，下载次数：<em id="downs"><script src="http://sentsin.com/item/filedown.asp?action=hits&id=3957"></script></em></span>
+        </div>
+		
+		 <div class="layer_text">
+			<h2>一些唠叨</h2>
+            <p><i>layer</i>，一个可以让你想到即可做到的<i>web</i>弹窗（层）解决方案（js组件），作者贤心（菜鸟级前端攻城师）。<i>layer</i>侧重于用户灵活的自定义，为不同人的使用习惯提供动力。其意义在于，可以让您的页面拥有更丰富与便捷的操作体验，而您只需在调用时简单地配置相关参数，即可轻松实现。</p>
+            <p>与同类弹出层组件相比，<i>layer</i>的优势明显，她尽可能地在以更少的代码展现出更强健的功能。<i>layer</i>格外注重性能的提升，在多层模式的回调处理中，具备其它多数层组件所没有的“独立不冲突”（已有<strong style="font-weight:bold;"><script src="http://sentsin.com/item/GetHits.asp?Action=Count&GetFlag=0&m=115&ID=2"></script></strong>人次关注新版<i>layer</i>）。您完全可以大可放心地在页面弹出任意数量的层，她们彼此不妨碍。当你问及她的兼容时，<i>layer</i>必须告诉你，她兼容了一切浏览器，包括古老的ie6。</p>
+            <p><i>layer</i>公开了如此多的接口（api），这使得您可以DIY太多您需要的风格，尤其是页面层模式，意味着必要时您可以完全抛弃<i>layer</i>的现有皮肤，并用你的思维去勾勒她的衣着。而问题在于，我必须中止“王婆卖瓜”的陈述。因为一切的不足或友好，都需要您在使用过程中去发现。</p>
+			<p>据不完全统计，截至到2013年8月30号，layer已服务于<strong style="font-weight:bold;">6000</strong>多家web平台。layer作为layUI库的成员，将一直致力于为web开发提供动力。</p>
+        </div>
+        <!-- layer970*90 
+        <ins class="adsbygoogle" style="display:inline-block;width:970px;height:90px" data-ad-client="ca-pub-6111334333458862"  data-ad-slot="5254867833"></ins>-->
+		<div class="layer_text">
+			<h2>layer热门案例</h2>
+			<p  style="line-height:19px;">
+				<a href="http://www.bayuanbao.com" target="_blank"><img style="margin-right:10px;" align="left" src="http://www.bayuanbao.com/images/logo.jpg" /></a>
+				<span>八圆包（<a href="http://www.bayuanbao.com" target="_blank">http://www.bayuanbao.com</a>）是一家贴心的小而美集市，致力于发现物美价廉，汇集高性价比实惠宝贝，比如<a href="http://www.bayuanbao.com" target="_blank">九块九包邮</a>性质的商品。它助你用最小的成本，缔造完美品质生活体验。该站所有页面都有用到layer，有兴趣的同学可以去八圆包玩玩，里面的商品都非常实惠。八圆包在试图展现一个真实的导购世界，由资深网购小编为您每日精选。</span>
+			</p>
+		</div>
+        
+        <div class="layer_text" >
+        	<h2>先一睹为快？</h2>
+             <p>点击以下各方框查看效果：</p>
+            <div class="layer_first"><a href="javascript:;">信息框</a><a href="javascript:;">信息框</a><a href="javascript:;">询问框</a><a href="javascript:;"  style="_display:none;">页面层</a><a href="javascript:;"  style="_display:none;">页面层</a><a href="javascript:;">iframe层</a><span class="open" type="kaiyuan">iframe层</span><a href="javascript:;">加载层</a><a href="javascript:;">tips</a><a href="javascript:;">tips</a></div>
+            
+        </div>
+         <div class="layer_text" style="padding-top:15px;">
+         	<div class="code1">
+            	<pre>
+//信息框例一
+$.layer({
+	area : ['auto','auto'],
+	dialog : {msg:'白菜级别前端攻城师贤心',type : 8}	
+});
+//快捷调用：
+layer.alert('白菜级别前端攻城师贤心', 8);
+
+//信息框例二
+$.layer({
+    area : ['auto','auto'],
+    title : false,
+    dialog : {msg:'前端攻城师贤心'}	
+});
+
+//询问框
+$.layer({
+    shade : [0], //不显示遮罩
+    area : ['auto','auto'],
+    dialog : {
+        msg:'您是如何看待前端开发？',
+        btns : 2, 
+        type : 4,
+        btn : ['重要','奇葩'],
+        yes : function(){
+            layer.msg('您选择了重要。',2,1);
+        },
+        no : function(){
+            layer.msg('奇葩!!!',2,4);
+        }
+    }
+});
+//快捷调用：layer.confirm();
+
+//页面层例一
+$.layer({
+	shade : false,
+	type : 1,
+	area : ['auto','auto'],
+	title : false,
+	border : [0],
+	page : {dom : '.layer_notice'},
+	close : function(index){
+		layer.close(index);
+		$('.layer_notice').show();
+	}
+});
+			
+//页面层例二
+var i = $.layer({
+	type: 1,
+	title: false,
+	closeBtn: false,
+	border : [5, 0.5, '#666', true],
+	offset: ['0px',''],
+	move: ['.juanmove', true],
+	area: ['620px','auto'],
+	page: {
+		html: '自定义的html'
+	}
+});
+$('.juanLu').on('click', function(){
+	layer.close(i);
+});
+
+//iframe层例一
+$.layer({
+    type : 2,
+    closeBtn : false,
+	shadeClose: true,
+    time : 5,
+    iframe : {
+        src : 'http://player.youku.com/player.php/sid/XMjY3MzgzODg0/v.swf'
+    },
+    title : false,
+    area : ['500px','300px'],
+    success : function(){ //层加载成功后进行的回调
+        layer.shift('right-bottom',1000); //浏览器右下角弹出
+    },
+    end : function(){ //层彻底关闭后执行的回调
+        $.layer({
+            type : 2,
+            offset : ['100px', ''],
+            iframe : {
+                src : 'http://sentsin.com/about/'
+            },	
+            area : ['960px','500px']
+        })
+    }
+});
+
+//iframe层例二
+$.layer({
+	type: 2,
+	title: false,
+	fix: false,
+	closeBtn: false,
+	shadeClose: true,
+	shade: [0.1,'#fff', true],
+	border : [5, 0.3, '#666', true],
+	offset: ['100px',''],
+	area: ['990px','500px'],
+	iframe: {src: 'http://sentsin.taobao.com/'},
+	success: function(){
+		layer.msg('点击层外任意处，可关闭该iframe层', 2, 9);
+	}
+});
+
+//加载层
+$.layer({
+    type : 3,
+    time : 2
+});
+//快捷调用：layer.load(0);
+
+//tips层一
+$('.class').click(function(){
+	layer.tips('我爱你，你爱我吗？' , this , 0, 200, 0, ['background-color:#E227C7; color:#fff', '#E227C7']);
+});
+
+//tips层二
+layer.tips('推荐虾米音乐网', '#id', 0, 200, 1);
+                </pre>
+            </div>
+         </div>
+		
+    </div>
+</div>
+
+<a href="javascript:;" class="open" id="newdemo" type="newdemo">新版示例</a>
+
+<div class="layer_api">
+	<div class="layer_apiTop"></div>
+    <div class="box layer_apiBox">
+		<table class="api_table" border="0" cellspacing="0" cellpadding="0">
+        	<thead class="api_title">
+    			<tr>
+      				<th colspan="3">layer API之键值（仅在需要时配置，未配置的会用默认）</th>
+                </tr>
+  			</thead>
+           	<tbody>
+               <tr style="color:#FFF; background:#1C1C1C;">
+                    <td style="width:20%;">键 : 值</td><td>描述</td>
+                </tr>
+				<tr>
+                    <td>type : 0,</td><td>层的类型。0：信息框（默认），1：页面层，2：iframe层，3：加载层，4：tips层。 <p>此为重要参数，不同类型层类型的总开关，调用时必须设置。</p></td>
+                </tr>
+                <tr>
+                    <td>shade : [0.5 , '#000' , true]</td><td>控制遮罩。0.5：遮罩透明度，'#000'：遮罩颜色，true：是否遮罩（否：false）</td>
+                </tr>
+                <tr>
+                    <td>shadeClose : false</td>
+                    <td>用来控制点击遮罩区域是否关闭层。(是：true)。</td>
+                </tr>
+                <tr>
+                    <td>fix : true,</td><td>层是否固定在可视区域。否：false</td>
+                </tr>
+                <tr>
+                    <td>move : ['.xubox_title' , true]</td><td>通过拖拽层的某个元素来实现对层的拖拽。'.xubox_title'：拖拽绑定事件所在元素选择器（默认为标题栏），true：是否允许拖拽（否：false）</td>
+                </tr>
+				 <tr>
+                    <td>moveOut : false</td><td>用于控制层是否允许被拖出可视窗口外，false：不允许，true：允许</td>
+                </tr>
+                <tr>
+                    <td>title : '信息'</td><td>控制标题栏。不想显示标题栏，配置title:false 即可</td>
+                </tr>
+                <tr>
+                    <td>offset : ['220px' , '50%']</td><td>控制层坐标。'220px'：纵坐标，'50%'：横坐标。 需要注意的是，像素必须带px单位，百分比不需要。该参数灵活运用，可助你实现诸多特效。</td>
+                </tr>
+                <tr>
+                    <td>area : ['310px' , 'auto']</td><td>控制层宽高。'310px'：宽，'auto'：高。 当设置为auto时，意味着采用自适应, 当然，对于宽度，并不推荐您这样做。</td>
+                </tr>
+                <tr>
+                    <td>closeBtn : [0 , true]</td><td>控制层右上角关闭按钮。0：关闭按钮风格（1：风格2），当标题栏不存在时，自动切换为风格2。 true：是否显示关闭按钮（否：false）</td>
+                </tr>
+                <tr>
+                    <td>time : 0</td><td>自动关闭等待秒数，整数值。也许它可以助你做蛮多事，想象一下吧。</td>
+                </tr>
+				<tr>
+                    <td>bgcolor : '#fff'</td><td>用于控制层的背景色，默认白色（#fff）,如设置透明，设置空字符即可。</td>
+                </tr>
+                <tr>
+                    <td>border : [10 , 0.3 , '#000', true]</td><td>10：边框大小，0.3：边框透明度，'#000'：边框颜色，true：是否显示边框（否：false）。通过它您可以任意配置边框，譬如你觉得边框碍眼，赶紧启用[0,0,'',false]吧</td>
+                </tr>
+                <tr>
+                    <td>zIndex : 19891014</td><td>控制层堆叠顺序（z-index）。整数值，默认是贤心的生日。合理设置它，可以避免与其它插件的层级冲突</td>
+                </tr>
+                <tr>
+                    <td>maxWidth : 400</td><td>最大宽度。整数值。当宽度设为auto时才有用。</td>
+                </tr>
+                <tr>
+                    <td>
+                        <pre>
+dialog: {
+    btns : 1,
+    btn : ['确定', '取消'],
+    type : 3,
+    msg : '',
+    yes : function(index){ },
+    no : function(index){ }
+}
+                        </pre>
+                    </td>
+                    <td>
+                    	<p>信息框层模式提供的私有参数。使用时，按需配置即可</p>
+                    	<p>btns : 按钮的个数。提供了0-2的选择</p>
+                        <p>btn : [按钮一的文本值 , 按钮二的文本值]</p>
+                        <p>type : 图标类型，提供了0-15的选择，也许有你喜欢的。 设置-1不显示图标（1.6.0）</p>
+                        <p>msg : 信息框内容，重要参数</p>
+                        <p>yes : 按钮一的回调函数</p>
+                        <p>no : 按钮二的回调函数</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+					<pre>
+page: {
+	dom: '#xulayer', 
+	html: '',
+	url: '',
+	ok: function(){}
+}
+					</pre>
+					</td><td>页面层模式私有参数。dom：需要弹出的html片段所对应的选择器（class 或 id，推荐用id，确保唯一）。html: 自定义html字符串。url：ajax请求地址。ok，ajax请求完毕后执行的回调。需要注意的是，优先级是：html>url>dom，这意味着，当你一旦配置了html的非空值，将优先采用html中的元素弹出，如此类推，若配置html或url，你必须也配置宽高值。html参数为layer-v1.5.1开始新增。url和ok为1.6.0开始新增</td>
+                </tr>
+                <tr>
+                    <td>
+					<pre>
+iframe: {
+ src: 'http://sentsin.com'
+}
+					</pre>
+					</td><td>iframe层模式私有参数。src：要打开的网址。使用率非常高，尤其是对于喜欢用iframe的同学。</td>
+                </tr>
+                <tr>
+                    <td>loading : {type : 0}</td><td>加载层私有属性。type：loading图标类型（提供了0-3的选择，试试吧，看看有无你喜欢的）。一般配合ajax使用</td>
+                </tr>
+                <tr>
+                    <td>
+                    	<pre>
+tips : {
+    msg: '',
+    follow: '',
+	guide: 0,
+	isGuide: true,
+	style: ['tips自定义样式', '三角形颜色']
+}          
+                        </pre>
+                    </td><td>tips小提示层私有属性。<br />
+					msg：提示内容。<br />
+					follow：触发事件对应的选择器。 <br />
+					guide：指引方向（0：上下，1：左右）。<br />
+					isGuide：是否显示默认三角形。 这个参数可配合msg帮助你自定义三角形icon<br />
+					[自定义样式示例] style: ['background-color:#FFF8ED; color:#000; border:1px solid #FF9900', '#FF9900']]。
+					<p>layer-v1.5.1开始，对tips逐渐有了较为完善的支持，提供了上下和左右模式，可智能识别指引方向。</p></td>
+                </tr>
+                <tr>
+                    <td>success : function(layer){}</td><td>层弹出成功后的回调函数</td>
+                </tr>
+                 <tr>
+                    <td>close : function(index){}</td><td>层右上角关闭按钮的回调函数。</td>
+                </tr>
+                 <tr>
+                    <td>end : function(){}</td><td>层被彻底关闭后执行的回调函数。它的存在让close回调成为浮云。</td>
+                </tr>
+				<tr>
+                    <td>moveEnd : function(){}</td><td>拖拽时鼠标按键放下后的回调函数</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="box layer_apiBox">
+    	<table class="api_table" border="0" cellspacing="0" cellpadding="0">
+            <thead class="api_title">
+                <tr>
+                    <th colspan="3">layer API之内置方法</th>
+                </tr>
+            </thead>
+            <tbody>
+               <tr style="color:#FFF; background:#1C1C1C;">
+                    <td style="width:10%;">方法名</td><td>描述</td>
+                </tr>    
+                <tr>
+                    <td>$.layer({})</td><td>核心接口，参数是一个对象，对象属性参见上述列表。诸如layer.alert()之类的为$.layer()的包装方法。</td>
+                </tr>
+				 <tr>
+                    <td>layer.v</td><td>获取版本号。</td>
+                </tr>
+				<tr>
+                    <td>layer.ready(callback)</td><td>layer中的样式文件装载完毕后执行的方法，一般用于页面加载时调用layer，这样可避免样式未加载即调用层导致的错乱。
+					示例：
+					<pre>
+layer.ready(function(){
+	layer.msg('Hello Layer');
+});
+					</pre>
+					</td>
+                </tr>
+				<tr>
+                    <td>layer.alert()</td><td>对单按钮信息框的重新封装，layer.alert(alertMsg , alertType, alertTit , alertYes),四个参数，alertMsg：信息内容（文本），alertType：提示图标（整数，0-10的选择），alertTit：标题（文本），alertYes：按钮的回调函数。 如：layer.alert('前端攻城师贤心')</td>
+                </tr>
+                <tr>
+                    <td>layer.confirm()</td><td>对询问框的重新封装，layer.confirm(conMsg  , conYes , conTit , conNo),四个参数，conMsg：信息内容（文本），conYes：按钮一回调，conTit：标题（文本），conNo：按钮二的回调。
+					<p>
+                    如：
+<pre>
+layer.confirm('确定删除?', function(){ 
+layer.msg('删除成功！') 
+});
+</pre>
+					</p>
+					</td>
+            	</tr>
+            	<tr>
+                	<td>layer.msg()</td><td>对无标题栏信息框层的重新封装，layer.msg(msgText , msgTime , msgType , callback),四个参数，msgText：信息内容（文本），msgTime：自动关闭所需等待秒数（默认2秒），msgType：提示图标（整数，0-10的选择），callback：自动销毁后的回调函数。如：layer.msg('嗨，伙计，我是layer')</td>
+           		</tr>
+            	<tr>
+					<td>layer.tips()</td><td>对tips层的重新封装，layer.tips(html , follow , time , maxWidth, guide, style),四个参数，html：信息内容（文本），follow：触发事件对应的选择器，time：自动关闭所需等待秒数，maxWidth：最大宽度，guide: 0（上下模式）或者1（左右模式） style: tips样式（参加api表格一中的style属性）
+					<p>
+					如：
+<pre>
+$('.demo').click(function(){
+	layer.tips('这是小提示',this);
+});
+</pre>
+					</p>
+					</td>
+				</tr>
+                <tr>
+                    <td>layer.load()</td><td>对加载层的重新封装，layer.load(loadTime , loadgif , loadShade),三个参数，loadTime：自动关闭所需等待秒数(0时则不自动关闭)，loadgif：加载图标（整数，0-3的选择），loadShade：是否遮罩（true 或 false）。如：layer.load(0);</td>
+                </tr>
+				<tr>
+                    <td>layer.area(index, options)</td><td>用于重定义指定层的宽高、坐标、z-index等。index为层的索引，options包含{width:'',height:'',top:'',left:'',zIndex:''}等css属性。该方法仅针对页面层（type:1）和iframe层（type:2）有效; 此方法为1.6.0开始新增</td>
+                </tr>
+				<tr>
+                    <td>layer.index</td><td>静态属性，用于获取最近一次触发的层索引值</td>
+                </tr>
+                <tr>
+                	<td>layer.getChildFrame(selector, index)</td><td>获取子iframe中的DOM。非常实用，父窗口操作iframe中内容时可以大显神威。index参数为1.6.0开始新增，由于允许弹出多个iframe层，所以需借助index索引来操作指定层</td>
+           		</tr>
+				<tr>
+                	<td>layer.getFrameIndex(window.name)</td><td>获取当前所在iframe层的索引。 只允许在iframe页面内部调用。如在内部关闭自身：
+					<pre>
+var i = parent.layer.getFrameIndex(window.name);
+parent.layer.close(i);
+					</pre>
+					</td>
+           		</tr>
+				
+                <tr>
+                	<td>layer.close(index)</td><td>用于手动关闭层。参数为layer的索引值。索引即通过弹出方法返回的值。如:
+					<p>
+<pre>
+var i = $.layer({}); //或者 var i = layer.alert();之类的也可返回索引
+layer.close('i');
+</pre>
+					</p>
+					</td>
+           		</tr>
+				<tr>
+                	<td>layer.closeAll()</td><td>用于关闭所有层，在多层模式时也许会用到</td>
+           		</tr>
+                <tr>
+                	<td>layer.shift(type , rate)</td><td>layer弹出时内置动画，type：动画类型，供四种中选择，左上：'left-top',右上：'right-top',左下：'left-bottom',右下：'right-bottom' 。 rate:动画频率，毫秒。
+					如：<pre>
+success : function(){
+   layer.shift('right-bottom' , 400);
+}
+</pre> 
+					</td>
+           		</tr>
+                <tr>
+                	<td>layer.autoArea(index)</td><td>用来处理在层中宽高改变时，重新自适应层宽高。必填参数为层的索引值</td>
+           		</tr>
+				<tr>
+                	<td>layer.iframeAuto(index)</td><td>用于让iframe层自适应。非常实用，如果是在iframe层内部，则可通过var index = layer.getFrameIndex
+
+(window.name)得到；若在父页面，则可通过调用iframe层的返回值得到，如var index = $.layer(); 详见官网实例演示之iframe子父操作。</td>
+           		</tr>
+				<tr>
+                	<td>layer.setMove()</td><td>当拖拽元素改变时，可用此方法重新初始化拖拽。</td>
+           		</tr>
+				<tr>
+                	<td>layer.zIndex</td><td>全局属性，用于获取layer容器中的最大z-index值</td>
+           		</tr>
+				<tr>
+                	<td>layer.setTop(layerNow)</td><td>引用此方法可开启点击使当前窗口置顶功能，只能用于用在success回调中，layerNow参数即为success回调函数中传过来
+
+的参数，即当前layer容器。type:1/type:2多窗口模式时可能非常实用，当需要时，需配置zIndex:layer.zIndex，可详见[实力加强版]一页的例子：[页面层]之无限层中层</td>
+           		</tr>
+			</tbody>
+		</table>
+    </div>
+</div>
+<div class="layer_demo">
+	<div class="box demo_main">
+        <div class="layer_text" >
+			<h2>实例演示</h2>
+			<p>layer提供了五种模式的层，分别为：信息框、页面层、iframe层、加载层、tips层。下面就此进行大致的演示，更多功能还需要您自己去实验发现。代码区域不包含事件绑定，使用时，请自己放在对应事件回调中执行。</p>
+			<p>使用组件时，请将layer整个文件夹放置您项目的任何一个目录下，只需引入layer.js或layer.min.js即可（别忘了引入jquery，推荐使用jquery1.8.0）</p>
+			<div class="layer_target clear"style="margin-bottom:10px;">
+				<a href="http://sentsin.com/jquery/layer/liuyanqiang.html" target="_blank">layer组件实现留言墙</a>
+				<a href="javascript:;" id="xinyuan">layer实现许愿盒</a>
+				<a href="http://sentsin.com/hello/2013/" target="_blank">layer实现星语心愿</a>
+			</div>
+			<p>点击以下各方框查看效果：</p>
+			<div class="layer_first clear"style="margin-bottom:10px;"><a href="javascript:;">例一</a><a href="javascript:;">例二</a><a href="javascript:;">例三</a><a href="javascript:;">例四</a><a href="javascript:;">内置16种图标</a><a href="javascript:;">例六</a></div>
+			<div class="code2">
+<pre>
+例一：
+layer.alert('一个很普通的信息框');
+
+例二：
+layer.alert('信息框演示二', 11, !1);
+
+例三：
+layer.confirm('信息框演示三',function(index){
+    layer.close(index);
+    layer.msg('信息框演示三');
+});
+
+例四：
+layer.msg('也可以不用显示图标哦', 2, -1);
+
+信息框之变脸：
+var i = 0;
+$.layer({
+	dialog:{type:0,msg:'<a href="javascript:;" id="setface">点击我，换图标</a>'},
+	success: function(layerE){
+		$('#setface').unbind('click').bind('click',function(){
+			var index = layer.getIndex(this);
+			i++;
+			layerE.find('.xubox_msgico').removeClass('xubox_msgtype'+(i-1)).addClass('xubox_msgtype'+i);
+			i > 10 && layer.close(index);
+		});
+	}, end: function(){
+		i = 0;
+	}
+});
+例六：
+layer.msg('踩到屎啦', 2, 13);
+</pre>
+			</div>
+      </div>
+            <div class="layer_first clear"style="margin-bottom:10px;"><a href="javascript:;">页面层之仿百度登录</a><a href="javascript:;">页面层之佟丽娅</a><a href="javascript:;">页面层之淘宝</a></div>
+            <div class="code2">
+<pre>
+
+一：页面层之仿百度登录：
+var i = $.layer({
+	type : 1,
+	title : false,
+	closeBtn : false,
+	border : [0],
+	area : ['455px','371px'],
+	page : {dom : '#baidu'}
+});
+$('#baidu').on('click', function(){
+	layer.close(i);
+});
+
+二、页面层之图片：
+var i = $.layer({
+    type : 1,
+    title : false,
+    fix : false,
+    offset:['50px' , ''],
+    area : ['515px','615px'],
+    page : {dom : '#tong'}
+});
+
+三、页面层之淘宝：
+var i = $.layer({
+    type : 1,
+    title : false,
+    offset:['150px' , ''],
+    border : false,
+    area : ['503px','395px'],
+    page : {dom : '#taobao'}
+});
+</pre>
+			</div>
+            <div class="layer_first clear"style="margin-bottom:10px;"><a href="javascript:;">iframe层之从左下角弹出</a><a href="javascript:;">iframe层之正中央</a><a href="javascript:;">iframe层之子父操作</a></div>
+            <div class="code2">
+            <pre>
+一：iframe层之从左下角弹出
+$.layer({
+    type : 2,
+    title : false,
+    iframe : {src : 'http://pic10.nipic.com/20101023/145234_134017065776_2.gif'},
+    area : ['350px' , '466px'],
+    success : function(){
+        layer.shift('left-bottom',400);	
+    }
+});
+
+二：iframe层之正中央
+$.layer({
+    type : 2,
+    title : '天之痕三个人的时光-半抱琵琶版',
+    iframe : {src : 'http://www.tudou.com/v/Rvy0IbYmBrQ/&resourceId=0_04_05_99/v.swf'},
+    area : ['750px' , '466px'],
+    offset : ['100px','']
+});
+
+三：iframe层之子父操作
+$.layer({
+	type : 2,
+	shade : [0],
+	title : ['iframe子父操作',true],
+	iframe : {src : 'iframe.html'},
+	area : ['500px' , '260px'],
+	offset : ['150px', ''],
+	close : function(index){
+		layer.msg('您获得了子窗口标记：' + layer.getChildFrame('#name', index).val(),3,1);
+		layer.close(index);
+	}
+});
+
+子窗口操作父窗口：
+var index = parent.layer.getFrameIndex(window.name);
+$('#a').click(function(){
+	parent.layer.msg('您将标记"' + $('#name').val() + '"成功传送给了父窗口' , 3, 1);
+	parent.layer.close(index);
+});
+$('#add').on('click', function(){
+	$('body').append('新元素');
+	parent.layer.iframeAuto(index);
+});
+$('#new').on('click', function(){
+	parent.$.layer({
+		type : 2,
+		title : ['iframe子父操作',true],
+		iframe : {src : 'http://sentsin.com'},
+		area : ['1000px' , '500px'],
+		offset : ['100px', '']
+	});
+});        
+            </pre>
+            </div>
+            <div class="layer_first clear"style="margin-bottom:10px;"><a href="javascript:;">例一</a><a href="javascript:;">例二</a></div>
+            <div class="code2">
+            <pre>
+例一：
+$.layer({
+    type : 3,
+    time : 2
+}); 
+//或 layer.load(3,2);
+//如不想让加载自动关闭，第一个参数设置0即可，如：layer.load(0);
+
+例二：					
+$.layer({
+    type : 3,
+    time : 2,
+    shade : false,
+    border : false,
+    loading : {type : 3}
+});           
+            </pre>
+            </div>
+            <div class="layer_first clear"style="margin-bottom:10px;"><a href="javascript:;">tips提示层一</a><a href="javascript:;">tips提示层二</a></div>
+            <div class="code2">
+            <pre>
+tips提示层一
+$('#id').on('click', function(){
+	layer.tips('嗨，<code><</code>em>朋友<code><</code>/em>，更多效果你自己慢慢发现吧。' , this, 0, 150, 0, ['background-color:#0FA6D8; color:#fff;','#0FA6D8']);
+});
+
+tips提示层二
+$('#id').on('click', function(){
+	layer.tips('在无数个前世/远古的记号/我相信忠贞的邂逅/将凝视在如故的火花/在思念中呈现，默念/宁缺毋滥/这是对生活的尊重/一如维护神圣之约/一旦出现/所有潜在的能量将会唤醒/一个真实并活着的我/星空将布满斗志/在旅行于天涯之间/在依偎于河川之中/大地奏响了奉献/这，就是生命/——贤心 2013.2.21 0:24' , this, 0, 400, 1, ['background-color:#F26C4F; color:#fff;','#F26C4F']);
+});
+      
+            </pre>
+            </div>
+            
+  </div>
+        </div>
+    </div>
+</div>
+
+<div id="skinCon" style="display:none;">
+<div class=" layer_skin">
+<div class="xu_center" style="background:#FFF; padding-top:0; margin:0;">
+<h3 class="main_title" style="cursor:move;"><i class="i"></i>关于皮肤</h3>
+<div class="write">
+<p>当你确切地试图拓展皮肤的时候，请注意查看skin/layer.css，里面的一切将会让你知道该如何去做。</p>
+<p>事实上skin属性的原理很简单，它是根据class，譬如默认皮肤的样式，统一的后缀是： _0，而如果你拓展下一个皮肤的时候，你可能需要加上后缀：_1</p>
+<p>非常重要的一点是，通过layer公开的页面层模式（type=1），您可以任意自定义自己的一套皮肤</p>
+</div>
+</div>
+</div>
+<div class="c_10"></div>
+<div class="box layer_compatibility">
+<div class="xu_center" style="background:#FFF; padding-top:0;  margin:0;">
+<h3 class="main_title" style="cursor:move;"><i class="i"></i>关于她的兼容性</h3>
+<div class="write">
+<p>事实上layer一直面临着ie6的考验，因为这位伙计实在是太古老了，layer不得不为此而单独写各种兼容，其中包括：</p>
+<p>ie6下，select无法遮掩的现象，采用的方法跟主流的一样，ie6下弹出layer时遍将正在显示的select隐藏，关闭时，再将刚刚隐藏的sleect显示，很笨拙不是吗？ 可layer必须这么做，为了更少的代码。</p>
+<p>ie6透明问题，单纯色的透明借助滤镜实现，而图片尤其是png32的透明，则是借助js组件来实现的，虽然显得如此臃肿，不过才有在ie6下它才会加载，而对于ie6，这种性能的糟糕早已可以抛之脑后。layer计划将在v2.0的版本放弃对ie6的支持。</p>
+<p>因为IE对object本身的bug，其默认的顶端优势为最先，因此您需要在object标签之间加上：&lt;param name=&quot;wmode&quot; value=&quot;Opaque&quot;&gt;  ，方可消除其顽固的顶端优势。</p>
+<p>因chrome的一些机制，当你的网页未架构后端脚本运行环境，ajax与iframe的子父操作是无法进行的，这是chrome的一大特性，而不是bug。</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="layer_text hide" id="questionsCon" style="padding:15px; background-color:#fff;">
+	<h2>常见问题</h2>
+	<strong>问：如何利用layer弹出无数个层</strong>
+    <p>页面层模式（type:1）灵活性很高，请详细阅读api中的page属性。它的存在几乎让一切变得可自定义，善用它，会让你的页面增加几乎可能实现的所有作用力。</p>
+	<strong>问：如何手动关闭层</strong>
+    <p>调用layer时，会返回一个索引，将此索引传递给layer.close()即可自己制作关闭层的模型。 如： var i = $.layer(); 关闭时，layer.close(i)即可</p>
+    <strong>问：layer支持跨iframe操作吗？</strong>
+    <p>答：答案是肯定的。layer提供了layer.getChildFrame(selector)和layer.getFrameIndex()两个方法（使用说明详见api）。他们可以帮助你轻松实现iframe之间的操作，另外，当你需要在子iframe操作父窗口时，请用parent对象，比如让iframe外弹出一个layer：parent.$.layer({}) </p>
+    <strong>问：我实在有太多的问题要问，怎么办？ </strong>
+    <p>答：在此不得不承认，贤心精力非常有限，而之所以维护layer，仅仅只是为了让朋友们在web开发中提供一些方便，尽管这种帮助是微小的，尽管layer还并不够成熟。 但这种无私并不意味着它的作者就必须承担解答你一切疑问的责任。 因此，如果您真的喜欢layer，请您花些时间阅读api，并尽可能地自己去修正layer的bug。 ——贤心</p>
+	 <a href="javascript:;" id="skin" style="display:block; width:180px; margin:0 auto; line-height:30px; padding:0 15px; background-color:#47A9D8; color:#fff; border-radius:3px;">点击查看皮肤与兼容性问题</a>
+</div>
+<div id="baidu" class="hide" title="当然，这只是一个图片，但你完全可以用样式写出类似的，然后弹出来。"><img src="images/bd.jpg" /></div>
+<div id="tong" class="hide" ><img src="images/tong.jpg" /></div>
+<div id="taobao" class="hide" ><img src="images/taobao.jpg" /></div>
+
+
+<a href="javascript:;" class="layer_ico layer_top"></a>
+
+<div class="c_15"></div>
+<div class="box_index shadow xufooter" style="font-size:12px; width: 1000px">
+	<div class="bottomMsg">
+		<a href="http://sentsin.com" class="footer_logo"><img src="/images/xin.gif"  alt="贤心，为你存在" /></a>
+		<ul class="footer_me">
+            <li>贤心 - 文学爱好者，前端攻城师</li>
+            <li>89年，杭州 - xu@sentsin.com</li>
+            <li><a href="http://weibo.com/SentsinXu" target="_blank">新浪微博</a>：<a href="http://weibo.com/SentsinXu" target="_blank">http://weibo.com/SentsinXu</a>
+            <li>天秤座的公正与理想主义，挣扎在丑与美之间</li>
+            <li>QQ群：176047238 (layUI库-Ⅰ群)</li>
+            <li>2012  &copy; sentsin.com <a href="https://me.alipay.com/sentsin" target="_blank">友情赞助</a></li>
+        </ul>
+		<ul class="ul footerLiuyan" id="liuyan"></ul>
+	</div>
+</div>
+
+<script src="../../lily/lib/code/code.min.js" tips="代码高亮"></script>
+<script src="demorun.js?v=1.6.0" title="调用layer的一些小demo"></script>
+<script src='http://w.cnzz.com/c.php?id=30060348'></script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</body>
+</html>
+
+
